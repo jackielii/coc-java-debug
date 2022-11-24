@@ -3,11 +3,21 @@
 
 import { commands, Extension, ExtensionApi, extensions, window, workspace } from 'coc.nvim'
 
+///////////////// vscode-java constants
 /**
  * Get the project settings
  */
 export const GET_PROJECT_SETTINGS = 'java.project.getSettings'
 
+/**
+ * Get all java projects root path in URI format
+ */
+export const GET_ALL_JAVA_PROJECTS = 'java.project.getAll'
+
+//////////////// vscode-java-dependency constants
+export const JAVA_PROJECT_LIST = 'java.project.list'
+
+//////////////// vscode-java-debug constants
 export const VSCODE_STARTDEBUG = 'vscode.startDebug'
 
 export const VSCODE_ADD_DEBUGCONFIGURATION = 'debug.addConfiguration'

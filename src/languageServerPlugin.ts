@@ -6,8 +6,13 @@ import { Range } from 'coc.nvim'
 
 import * as commands from './commands'
 
-export async function getProjectSettings(uri: string, settingKeys: string[]) {
-  return await commands.executeJavaLanguageServerCommand(commands.GET_PROJECT_SETTINGS, uri, settingKeys)
+export async function getAllJavaProjects() {
+  const projectUris: string[] = await commands.executeJavaLanguageServerCommand(commands.GET_ALL_JAVA_PROJECTS)
+  return projectUris
+}
+
+export async function getProjects(params: string): Promise<INodeData[]> {
+  return (await commands.executeJavaLanguageServerCommand(commands.JAVA_PROJECT_LIST, params)) || []
 }
 
 export enum CompileWorkspaceStatus {
@@ -189,4 +194,39 @@ export interface InlineVariable {
   kind: InlineKind
   expression: string
   declaringClass: string
+}
+
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
+export enum NodeKind {
+  Workspace = 1,
+  Project = 2,
+  Container = 3,
+  PackageRoot = 4,
+  Package = 5,
+  PrimaryType = 6,
+  Folder = 7,
+  File = 8,
+}
+
+export enum TypeKind {
+  Class = 1,
+  Interface = 2,
+  Enum = 3,
+}
+
+export interface INodeData {
+  displayName?: string
+  name: string
+  moduleName?: string
+  path?: string
+  /**
+   * returned from Java side using `IJavaElement.getHandlerIdentifier();`
+   */
+  handlerIdentifier?: string
+  uri?: string
+  kind: NodeKind
+  children?: any[]
+  metaData?: { [id: string]: any }
 }

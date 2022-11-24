@@ -1,17 +1,23 @@
 import { commands, ExtensionContext, OutputChannel, window, workspace } from 'coc.nvim'
-import { IMainMethod, resolveClasspath, resolveJavaExecutable, resolveMainMethod } from './languageServerPlugin'
+import {
+  IMainMethod,
+  getAllJavaProjects,
+  resolveClasspath,
+  resolveJavaExecutable,
+  resolveMainMethod,
+} from './languageServerPlugin'
 
 import { spawn } from 'child_process'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const config = workspace.getConfiguration('java-ext')
-  // const output = window.createOutputChannel('java-ext')
+  const output = window.createOutputChannel('java-ext')
 
-  // output.appendLine('java-ext activated')
-  // const debugEnabled = config.get<boolean>('debug')
-  // if (debugEnabled) {
-  //   output.appendLine('Debug enabled')
-  // }
+  output.appendLine('coc-java-ext activated')
+  const debugEnabled = config.get<boolean>('debug')
+  if (debugEnabled) {
+    output.appendLine('Debug enabled')
+  }
 
   const outputs = new Map<string, OutputChannel>()
 
@@ -31,16 +37,15 @@ export async function activate(context: ExtensionContext): Promise<void> {
       const java = await resolveJavaExecutable(method.mainClass, method.projectName ?? '')
 
       const cmd = `${shellEscape(java)} -cp ${shellEscape(cp.flat().join(':'))} ${method.mainClass}`
-      // if (debugEnabled) {
-      //   output.appendLine(`launchMain: \n${cmd}`)
-      //   output.show()
-      // }
-      const outputId = `java-ext ${method.projectName} ${method.mainClass}`
+      // const projects = await getAllJavaProjects()
+      // output.appendLine(projects.toString())
+
+      const outputId = `Launch output ${method.projectName} ${method.mainClass}`
       let lo = outputs.get(outputId)
       if (!lo) {
         lo = window.createOutputChannel(outputId)
         outputs.set(outputId, lo)
-        lo.show(true)
+        lo.show()
       } else {
         lo.clear()
       }
