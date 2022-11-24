@@ -1,0 +1,65 @@
+{
+  "name": "coc-java-debug",
+  "version": "0.0.0-development",
+  "description": "",
+  "author": "Jackie Li <jackie.space@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.80"
+  },
+  "scripts": {
+    "lint": "eslint src --ext ts",
+    "clean": "rimraf lib",
+    "watch": "node esbuild.js --watch",
+    "build": "node esbuild.js",
+    "prepare": "node esbuild.js",
+    "build-server": "node scripts/build/buildJdtlsExt.js"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "semi": false
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "coc.nvim": "^0.0.80",
+    "esbuild": "^0.14.24",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.2"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "javaExtensions": [
+      "./server/com.microsoft.java.debug.plugin-0.42.0.jar"
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "coc-java-debug configuration",
+      "properties": {
+        "java-debug.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable coc-java-debug debug information"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "java.debug.launchMain",
+        "title": "Launch main method",
+        "category": "Java"
+      }
+    ]
+  }
+}
