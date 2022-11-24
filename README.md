@@ -2,11 +2,17 @@
 
 forked from [vscode-java-debug], only a subset of functionality implemented:
 
-1. launch
+**Commands**:
+
+- [ ] Launch main (built in terminal)
+
+**Lists**:
+
+- [ ] Projects
 
 ## Install
 
-`:CocInstall coc-java-debug`
+`:CocInstall coc-java-debug-jl`
 
 ## License
 

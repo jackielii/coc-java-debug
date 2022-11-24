@@ -1,13 +1,17 @@
 {
-  "name": "coc-java-debug",
+  "name": "coc-java-debug-jl",
   "version": "0.0.0-development",
-  "description": "",
+  "description": "vscode-java-debug fork for coc.nvim",
   "author": "Jackie Li <jackie.space@gmail.com>",
-  "license": "MIT",
+  "license": "EPL",
   "main": "lib/index.js",
   "keywords": [
     "coc.nvim"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jackielii/coc-java-debug.git"
+  },
   "engines": {
     "coc": "^0.0.80"
   },
