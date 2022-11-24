@@ -1,6 +1,6 @@
 {
   "name": "coc-java-ext",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "vscode-java extensions fork for coc.nvim",
   "author": "Jackie Li <jackie.space@gmail.com>",
   "license": "EPL",
@@ -29,6 +29,7 @@
     "semi": false
   },
   "devDependencies": {
+    "@types/watch": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "coc.nvim": "^0.0.80",
@@ -51,7 +52,7 @@
       "type": "object",
       "title": "coc-java-ext configuration",
       "properties": {
-        "java-debug.debug": {
+        "java-ext.debug": {
           "type": "boolean",
           "default": false,
           "description": "Enable coc-java-ext debug information"

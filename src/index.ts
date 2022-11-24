@@ -1,9 +1,19 @@
-import { commands, ExtensionContext, window, workspace } from 'coc.nvim'
+import { commands, ExtensionContext, OutputChannel, window, workspace } from 'coc.nvim'
 import { IMainMethod, resolveClasspath, resolveJavaExecutable, resolveMainMethod } from './languageServerPlugin'
+
+import { spawn } from 'child_process'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const config = workspace.getConfiguration('java-ext')
-  const output = window.createOutputChannel('java-ext')
+  // const output = window.createOutputChannel('java-ext')
+
+  // output.appendLine('java-ext activated')
+  // const debugEnabled = config.get<boolean>('debug')
+  // if (debugEnabled) {
+  //   output.appendLine('Debug enabled')
+  // }
+
+  const outputs = new Map<string, OutputChannel>()
 
   context.subscriptions.push(
     commands.registerCommand('java.ext.launchMain', async () => {
@@ -20,15 +30,39 @@ export async function activate(context: ExtensionContext): Promise<void> {
       const cp = await resolveClasspath(method.mainClass, method.projectName ?? '')
       const java = await resolveJavaExecutable(method.mainClass, method.projectName ?? '')
 
-      const cmd = `split term://${shellEscape(java)} -cp ${shellEscape(cp.flat().join(':'))} ${method.mainClass}`
-      if (config.get<boolean>('debug')) {
-        output.appendLine(cmd)
+      const cmd = `${shellEscape(java)} -cp ${shellEscape(cp.flat().join(':'))} ${method.mainClass}`
+      // if (debugEnabled) {
+      //   output.appendLine(`launchMain: \n${cmd}`)
+      //   output.show()
+      // }
+      const outputId = `java-ext ${method.projectName} ${method.mainClass}`
+      let lo = outputs.get(outputId)
+      if (!lo) {
+        lo = window.createOutputChannel(outputId)
+        outputs.set(outputId, lo)
+        lo.show(true)
+      } else {
+        lo.clear()
       }
-      workspace.nvim.command(cmd)
+      lo.appendLine(`launchMain:\n${cmd}\n`)
+      const p = spawn(java, ['-cp', cp.flat().join(':'), method.mainClass], {
+        stdio: 'pipe',
+        cwd: workspace.cwd,
+      })
+      p.stdout.on('data', (data) => {
+        lo?.append(data.toString())
+      })
+      p.stderr.on('data', (data) => {
+        lo?.append(data.toString())
+      })
+
+      // const cmdLaucnch = 'split term://'
+      // workspace.nvim.command(cmdLaucnch + cmd)
     }),
 
     commands.registerCommand('java.ext.launchProjectMain', async () => {
       const doc = await workspace.document
+      window.showMessage('not implemented yet', 'warning')
       // idea:
       // save project listing in a list
       // check doc.uri starts with project uri
