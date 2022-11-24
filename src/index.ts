@@ -2,8 +2,11 @@ import { commands, ExtensionContext, window, workspace } from 'coc.nvim'
 import { IMainMethod, resolveClasspath, resolveJavaExecutable, resolveMainMethod } from './languageServerPlugin'
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  const config = workspace.getConfiguration('java-ext')
+  const output = window.createOutputChannel('java-ext')
+
   context.subscriptions.push(
-    commands.registerCommand('java.debug.launchMain', async () => {
+    commands.registerCommand('java.ext.launchMain', async () => {
       const doc = await workspace.document
       const methods = await resolveMainMethod(doc.uri)
 
@@ -18,13 +21,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
       const java = await resolveJavaExecutable(method.mainClass, method.projectName ?? '')
 
       const cmd = `split term://${shellEscape(java)} -cp ${shellEscape(cp.flat().join(':'))} ${method.mainClass}`
-      if (workspace.getConfiguration('java-debug').get<boolean>('debug')) {
-        console.log(cmd)
+      if (config.get<boolean>('debug')) {
+        output.appendLine(cmd)
       }
       workspace.nvim.command(cmd)
     }),
 
-    commands.registerCommand('java.debug.launchProjectMain', async () => {
+    commands.registerCommand('java.ext.launchProjectMain', async () => {
       const doc = await workspace.document
       // idea:
       // save project listing in a list
@@ -36,7 +39,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     // listManager.registerList(new DemoList(workspace.nvim)),
 
     // sources.createSource({
-    //   name: 'coc-java-debug completion source', // unique id
+    //   name: 'coc-java-ext completion source', // unique id
     //   doComplete: async () => {
     //     const items = await getCompletionItems()
     //     return items
@@ -45,7 +48,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
     // workspace.registerKeymap(
     //   ['n'],
-    //   'java-debug-keymap',
+    //   'java-ext-keymap',
     //   async () => {
     //     window.showMessage(`registerKeymap`)
     //   },
@@ -67,11 +70,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
 //     items: [
 //       {
 //         word: 'TestCompletionItem 1',
-//         menu: '[coc-java-debug]',
+//         menu: '[coc-java-ext]',
 //       },
 //       {
 //         word: 'TestCompletionItem 2',
-//         menu: '[coc-java-debug]',
+//         menu: '[coc-java-ext]',
 //       },
 //     ],
 //   }

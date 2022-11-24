@@ -1,7 +1,7 @@
 {
-  "name": "coc-java-debug-jl",
-  "version": "0.0.0-development",
-  "description": "vscode-java-debug fork for coc.nvim",
+  "name": "coc-java-ext",
+  "version": "0.0.0",
+  "description": "vscode-java extensions fork for coc.nvim",
   "author": "Jackie Li <jackie.space@gmail.com>",
   "license": "EPL",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackielii/coc-java-debug.git"
+    "url": "https://github.com/jackielii/coc-java-ext.git"
   },
   "engines": {
     "coc": "^0.0.80"
@@ -49,12 +49,12 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "coc-java-debug configuration",
+      "title": "coc-java-ext configuration",
       "properties": {
         "java-debug.debug": {
           "type": "boolean",
           "default": false,
-          "description": "Enable coc-java-debug debug information"
+          "description": "Enable coc-java-ext debug information"
         }
       }
     },

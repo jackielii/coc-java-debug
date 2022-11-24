@@ -1,22 +1,28 @@
-# coc-java-debug
+# coc-java-ext
 
-forked from [vscode-java-debug], only a subset of functionality implemented:
+forked from vscode-java extensions, only a subset of functionality implemented:
 
 **Commands**:
 
-- [ ] Launch main (built in terminal)
+- [x] Launch main in current file (using built in terminal)
+- [ ] Launch package
+- [ ] Launch tests
 
 **Lists**:
 
 - [ ] Projects
 
+**Debug**:
+
+TODO
+
 ## Install
 
-`:CocInstall coc-java-debug-jl`
+`:CocInstall coc-java-ext`
 
 ## License
 
-EPL 1.0, See [LICENSE](LICENSE.txt) file.
+EPL 1.0
 
 ---
 

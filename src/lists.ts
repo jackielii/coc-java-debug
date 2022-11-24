@@ -2,7 +2,7 @@ import { BasicList, ListAction, ListContext, ListItem, Neovim, window } from 'co
 
 export default class DemoList extends BasicList {
   public readonly name = 'demo_list'
-  public readonly description = 'CocList for coc-java-debug'
+  public readonly description = 'CocList for coc-java-ext'
   public readonly defaultAction = 'open'
   public actions: ListAction[] = []
 
@@ -17,11 +17,11 @@ export default class DemoList extends BasicList {
   public async loadItems(context: ListContext): Promise<ListItem[]> {
     return [
       {
-        label: 'coc-java-debug list item 1',
+        label: 'coc-java-ext list item 1',
         data: { name: 'list item 1' },
       },
       {
-        label: 'coc-java-debug list item 2',
+        label: 'coc-java-ext list item 2',
         data: { name: 'list item 2' },
       },
     ]
