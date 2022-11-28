@@ -6,14 +6,19 @@ const cp = require('child_process')
 const path = require('path')
 const fs = require('fs')
 
-const server_dir = path.resolve('../java-debug')
+const debugServerDir = path.resolve('../java-debug')
+const depServerDir = path.resolve('../vscode-java-dependency/jdtls.ext')
 
-cp.execSync(mvnw() + ' clean package', {
-  cwd: server_dir,
-  stdio: [0, 1, 2],
-})
-copy(path.join(server_dir, 'com.microsoft.java.debug.plugin/target'), path.resolve('server'), (file) => {
+console.log('building java.debug...')
+cp.execSync(mvnw() + ' clean package', { cwd: debugServerDir, stdio: [0, 1, 2] })
+copy(path.join(debugServerDir, 'com.microsoft.java.debug.plugin/target'), path.resolve('server'), (file) => {
   return /^com.microsoft.java.debug.*.jar$/.test(file)
+})
+
+console.log('building jdtls.ext...')
+cp.execSync(mvnw() + ' clean package', { cwd: depServerDir, stdio: [0, 1, 2] })
+copy(path.join(depServerDir, 'com.microsoft.jdtls.ext.core/target'), path.resolve('server'), (file) => {
+  return /^com.microsoft.jdtls.ext.core.*.jar$/.test(file)
 })
 
 function copy(sourceFolder, targetFolder, fileFilter) {

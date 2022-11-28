@@ -39,14 +39,20 @@
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "vscode-uri": "^3.0.6"
   },
   "activationEvents": [
-    "*"
+    "onLanguage:java",
+    "workspaceContains:pom.xml",
+    "workspaceContains:build.gradle",
+    "workspaceContains:build.gradle.kts",
+    "workspaceContains:.classpath"
   ],
   "contributes": {
     "javaExtensions": [
-      "./server/com.microsoft.java.debug.plugin-0.42.0.jar"
+      "./server/com.microsoft.java.debug.plugin-0.42.0.jar",
+      "./server/com.microsoft.jdtls.ext.core-0.21.1.jar"
     ],
     "configuration": {
       "type": "object",

@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, OutputChannel, window, workspace } from 'coc.nvim'
+import { commands, ExtensionContext, listManager, OutputChannel, window, workspace } from 'coc.nvim'
 import {
   IMainMethod,
   getAllJavaProjects,
@@ -8,6 +8,7 @@ import {
 } from './languageServerPlugin'
 
 import { spawn } from 'child_process'
+import ProjectList from './lists'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const config = workspace.getConfiguration('java-ext')
@@ -20,6 +21,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
 
   const outputs = new Map<string, OutputChannel>()
+
+  const projectList = new ProjectList(workspace.nvim)
 
   context.subscriptions.push(
     commands.registerCommand('java.ext.launchMain', async () => {
@@ -73,9 +76,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
       // check doc.uri starts with project uri
       // project listing is cached
       // check /Users/jackieli/personal/vscode-java/src/runtimeStatusBarProvider.ts:124
-    })
+    }),
 
-    // listManager.registerList(new DemoList(workspace.nvim)),
+    listManager.registerList(projectList)
 
     // sources.createSource({
     //   name: 'coc-java-ext completion source', // unique id
