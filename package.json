@@ -1,6 +1,6 @@
 {
   "name": "coc-java-ext",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "vscode-java extensions fork for coc.nvim",
   "author": "Jackie Li <jackie.space@gmail.com>",
   "license": "EPL",

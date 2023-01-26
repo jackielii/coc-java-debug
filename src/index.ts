@@ -1,11 +1,15 @@
-import { commands, ExtensionContext, listManager, OutputChannel, window, workspace } from 'coc.nvim'
-import {
-  IMainMethod,
-  getAllJavaProjects,
-  resolveClasspath,
-  resolveJavaExecutable,
-  resolveMainMethod,
-} from './languageServerPlugin'
+import {commands, ExtensionContext, listManager, OutputChannel, window, workspace} from 'coc.nvim'
+import {IMainMethod, resolveClasspath, resolveJavaExecutable, resolveMainMethod} from './languageServerPlugin'
+  services,
+import {spawn} from 'child_process'
+import ProjectList from './lists'
+  OutputChannel,
+  window,
+  workspace,
+  LanguageClient,
+  IServiceProvider,
+} from 'coc.nvim'
+import { IMainMethod, resolveClasspath, resolveJavaExecutable, resolveMainMethod } from './languageServerPlugin'
 
 import { spawn } from 'child_process'
 import ProjectList from './lists'
@@ -26,6 +30,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   context.subscriptions.push(
     commands.registerCommand('java.ext.launchMain', async () => {
+      // services.getService('java').restart()
       const doc = await workspace.document
       const methods = await resolveMainMethod(doc.uri)
 
@@ -34,14 +39,20 @@ export async function activate(context: ExtensionContext): Promise<void> {
         return
       }
 
-      // const method: IMainMethod = methods[await window.showQuickpick(methods.map((m) => m.mainClass))]
-      const method: IMainMethod = methods[0]
+      let method: IMainMethod = methods[0]
+      if (methods.length > 1) {
+        const res = await window.showQuickpick(methods.map((m) => m.mainClass))
+        if (res === -1) {
+          return
+        }
+        method = methods[res]
+      }
       const cp = await resolveClasspath(method.mainClass, method.projectName ?? '')
       const java = await resolveJavaExecutable(method.mainClass, method.projectName ?? '')
 
-      const cmd = `${shellEscape(java)} -cp ${shellEscape(cp.flat().join(':'))} ${method.mainClass}`
-      // const projects = await getAllJavaProjects()
-      // output.appendLine(projects.toString())
+      const cmd = `${shellEscape(java)} -XX:+ShowCodeDetailsInExceptionMessages -cp ${shellEscape(
+        cp.flat().join(':')
+      )} ${method.mainClass}`
 
       const outputId = `Launch output ${method.projectName} ${method.mainClass}`
       let lo = outputs.get(outputId)
@@ -53,7 +64,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         lo.clear()
       }
       lo.appendLine(`launchMain:\n${cmd}\n`)
-      const p = spawn(java, ['-cp', cp.flat().join(':'), method.mainClass], {
+      const p = spawn(java, ['-XX:+ShowCodeDetailsInExceptionMessages', '-cp', cp.flat().join(':'), method.mainClass], {
         stdio: 'pipe',
         cwd: workspace.cwd,
       })

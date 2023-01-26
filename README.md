@@ -4,7 +4,7 @@ forked from vscode-java extensions, only a subset of functionality implemented:
 
 **Commands**:
 
-- [x] Launch main in current file (using built in terminal)
+- [x] Launch main method in current file
 - [ ] Launch package
 - [ ] Launch tests
 

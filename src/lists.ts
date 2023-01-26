@@ -12,7 +12,7 @@ export default class ProjectList extends BasicList {
     super(nvim)
     this.defaultAction = 'info'
     this.addAction('info', async (item: ListItem) => {
-      window.showMessage(`${item.label}, ${JSON.stringify(item.data)}`)
+      window.showInformationMessage(JSON.stringify(item.data, null, 2))
     })
   }
 
